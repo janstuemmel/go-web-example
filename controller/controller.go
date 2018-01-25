@@ -1,7 +1,6 @@
 package controller
 
 import (
-  "io"
   "net/http"
 )
 
@@ -9,24 +8,24 @@ type DataProvider interface {
   Get() ([]byte, error)
 }
 
-
-func RootRoute(provider DataProvider) func(w http.ResponseWriter, r *http.Request) {
-
-  return func(w http.ResponseWriter, r *http.Request) {
-
-    io.WriteString(w, "Welcome home!")
-  }
+type Controller struct {
+  provider DataProvider
 }
 
+func NewController(provider DataProvider) Controller {
+  return Controller{provider}
+}
 
-func JsonRoute(provider DataProvider) func(w http.ResponseWriter, r *http.Request) {
+func (c Controller) JsonRoute(w http.ResponseWriter, r *http.Request) {
 
-  return func(w http.ResponseWriter, r *http.Request) {
+  b, _ := c.provider.Get()
 
-      b, _ := provider.Get()
+  w.WriteHeader(http.StatusOK)
+  w.Header().Set("Content-Type", "application/json")
+  w.Write(b)
+}
 
-      w.WriteHeader(http.StatusOK)
-      w.Header().Set("Content-Type", "application/json")
-      w.Write(b)
-  }
+func (c Controller) RootRoute(w http.ResponseWriter, r *http.Request) {
+
+  w.Write([]byte("Welcome home!"))
 }

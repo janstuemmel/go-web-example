@@ -23,13 +23,20 @@ func (t *ProviderMock) Get() ([]byte, error) {
 
 var _ = Describe("Controller Tests", func() {
 
+	var p DataProvider
+	var c Controller
+
+	BeforeEach(func() {
+		p = &ProviderMock{}
+		c = NewController(p)
+	})
+
 	It("Should get root", func() {
 
 		// given
 		req, _ := http.NewRequest("GET", "", nil)
 		rr := httptest.NewRecorder()
-		provider := &ProviderMock{}
-		controller := http.HandlerFunc(RootRoute(provider))
+		controller := http.HandlerFunc(c.RootRoute)
 
 		// when
 		controller.ServeHTTP(rr, req)
@@ -45,8 +52,7 @@ var _ = Describe("Controller Tests", func() {
 		// given
 		req, _ := http.NewRequest("GET", "", nil)
 		rr := httptest.NewRecorder()
-		provider := &ProviderMock{}
-		controller := http.HandlerFunc(JsonRoute(provider))
+		controller := http.HandlerFunc(c.JsonRoute)
 
 		// when
 		controller.ServeHTTP(rr, req)

@@ -4,7 +4,7 @@ import (
   "net/http"
   "encoding/json"
 
-  "github.com/janstuemmel/go-web-example/controller"
+  . "github.com/janstuemmel/go-web-example/controller"
 )
 
 type Message struct {
@@ -27,13 +27,15 @@ func (t *TestJsonProvider) Get() ([]byte, error) {
 
 func main() {
 
+
   provider := &TestJsonProvider{}
+  controller := NewController(provider);
 
   // handle root
-  http.HandleFunc("/", controller.RootRoute(provider));
+  http.HandleFunc("/", controller.RootRoute);
 
   // handle api
-  http.HandleFunc("/test.json", controller.JsonRoute(provider))
+  http.HandleFunc("/test.json", controller.JsonRoute)
 
   // start server
   http.ListenAndServe(":8000", nil)
