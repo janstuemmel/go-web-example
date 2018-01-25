@@ -2,6 +2,8 @@
 
 # go web example
 
+Code for learning go
+
 ## Test
 
 ```sh
