@@ -7,6 +7,8 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	m "github.com/janstuemmel/go-web-example/model"
 )
 
 func TestController(t *testing.T) {
@@ -16,10 +18,9 @@ func TestController(t *testing.T) {
 
 type ProviderMock struct {}
 
-func (t *ProviderMock) Get() ([]byte, error) {
- return []byte("{ foo: 1 }"), nil
+func (t *ProviderMock) Get() m.Message {
+ return m.NewMessage("Foo", "Bar")
 }
-
 
 var _ = Describe("Controller Tests", func() {
 
@@ -58,7 +59,7 @@ var _ = Describe("Controller Tests", func() {
 		controller.ServeHTTP(rr, req)
 
 		// then
-		Expect(rr.Body.String()).To(Equal("{ foo: 1 }"))
+		Expect(rr.Body.String()).To(Equal("{\"Name\":\"Foo\",\"Body\":\"Bar\"}"))
 		Expect(rr.Code).To(Equal(200))
 	})
 

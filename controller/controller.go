@@ -2,10 +2,12 @@ package controller
 
 import (
   "net/http"
+
+  . "github.com/janstuemmel/go-web-example/model"
 )
 
 type DataProvider interface {
-  Get() ([]byte, error)
+  Get() Message
 }
 
 type Controller struct {
@@ -18,7 +20,8 @@ func NewController(provider DataProvider) Controller {
 
 func (c Controller) JsonRoute(w http.ResponseWriter, r *http.Request) {
 
-  b, _ := c.provider.Get()
+  m := c.provider.Get()
+  b, _ := m.ToJSON()
 
   w.WriteHeader(http.StatusOK)
   w.Header().Set("Content-Type", "application/json")

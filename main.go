@@ -2,33 +2,16 @@ package main
 
 import (
   "net/http"
-  "encoding/json"
 
   . "github.com/janstuemmel/go-web-example/controller"
+  . "github.com/janstuemmel/go-web-example/provider"
 )
-
-type Message struct {
-  Name string
-  Body string
-  Time int64
-}
-
-type TestJsonProvider struct {}
-
-func (t *TestJsonProvider) Get() ([]byte, error) {
-
-  m := Message{ "Bob", "Hello World", 123 }
-
-  b, err := json.Marshal(m)
-
-  return b, err
-}
 
 
 func main() {
 
 
-  provider := &TestJsonProvider{}
+  provider := NewProvider()
   controller := NewController(provider);
 
   // handle root
